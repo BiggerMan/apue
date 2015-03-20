@@ -10,7 +10,7 @@ int main()
 		buff[strlen(buff)-1] = '\0';
 		if(strcmp(buff,"ls")==0)
 		{
-			do_ls();	
+			do_ls(1,"");	
 		}
 		else
 		{

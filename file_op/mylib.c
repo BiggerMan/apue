@@ -26,7 +26,7 @@ char* get_file_type(struct stat buf)
 	return ptr;
 }
 
-int do_ls()
+int do_ls(int argc,char *argv[])
 {
 	DIR *dp;
 	struct stat state;
@@ -43,21 +43,35 @@ int do_ls()
 	*ptr++='/';
 	*ptr=0;
 
-	if( (dp=opendir(cwd)) == NULL )
+	if(argc==1)
 	{
-		perror("can't open current dir!");
-	}
-	else
-	{
-		printf("name\t\ttype\n");
-		while( (dirp=readdir(dp))!=NULL )
+		if((dp=opendir(cwd)) == NULL )
 		{
-			strcpy(ptr, dirp->d_name);
-			lstat(fullpath, &state);
-			printf("%s\t\t%s\n", dirp->d_name, get_file_type(state));
+			perror("can't open current dir!");
 		}
 	}
+	else if(argc==2)
+	{	
+		if((dp=opendir(argv[1])) == NULL )
+		{
+			perror("can't open current dir!");
+		}
+
+	}
+	else
+		printf("multi paths are not supported now!\n");
+	/*print the dir list*/
+	printf("name\t\ttype\n");
+	while( (dirp=readdir(dp))!=NULL )
+	{
+		strcpy(ptr, dirp->d_name);
+		lstat(fullpath, &state);
+		printf("%s\t\t%s\n", dirp->d_name, get_file_type(state));
+	}
+
 	closedir(dp);
+
+	return 0;
 }
 
 
